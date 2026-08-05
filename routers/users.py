@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field
 from starlette import status
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from ..models import Users
-from ..database import SessionLocal
+from models import Users
+from database import SessionLocal
 from .auth import get_current_user
 
 router = APIRouter(

@@ -100,7 +100,7 @@ The app expects a PostgreSQL database named `TodoApplicationDatabase` on `localh
 
 #### Option C: Run the SQL setup script
 
-1. Open the SQL file at `ToDoApp/PostgreSQL_init_script.sql`.
+1. Open the SQL file at `/PostgreSQL_init_script.sql`.
 2. In pgAdmin 4, right-click the `TodoApplicationDatabase` database and choose `Query Tool`.
 3. Paste the contents of `PostgreSQL_init_script.sql` into the query editor.
 4. Click `Execute` (or press `F5`) to run the script.
@@ -112,7 +112,7 @@ You can verify the tables by expanding:
 Servers -> PostgreSQL -> Databases -> TodoApplicationDatabase -> Schemas -> public -> Tables
 ```
 
-> If you use different PostgreSQL credentials than the defaults in `ToDoApp/database.py`, update the connection string in that file accordingly.
+> If you use different PostgreSQL credentials than the defaults in `/database.py`, update the connection string in that file accordingly.
 
 ##### Reference
 - Installing PostgreSQL in [Windows](https://www.udemy.com/course/fastapi-the-complete-course/learn/lecture/30831856#overview) | [Mac](https://www.udemy.com/course/fastapi-the-complete-course/learn/lecture/30831862#overview)
@@ -196,7 +196,7 @@ sequenceDiagram
 Run the test suite from the parent folder:
 
 ```bash
-pytest ToDoApp/test -q
+pytest /test -q
 ```
 
 ## Notes

@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 from starlette import status
 from sqlalchemy.orm import Session
-from ..models import Users
-from ..database import SessionLocal
+from models import Users
+from database import SessionLocal
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
@@ -53,7 +53,7 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]  # create a dependency for the db session
 
-templates = Jinja2Templates(directory="ToDoApp/templates")
+templates = Jinja2Templates(directory="templates")
 
 ### Pages ###
 @router.get("/login-page")

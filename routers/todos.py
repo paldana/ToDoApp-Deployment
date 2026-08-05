@@ -3,8 +3,8 @@ from fastapi import APIRouter, Depends, HTTPException, Path, Request
 from pydantic import BaseModel, Field
 from starlette import status
 from sqlalchemy.orm import Session
-from ..models import Todos
-from ..database import SessionLocal
+from models import Todos
+from database import SessionLocal
 from .auth import get_current_user
 from starlette.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -26,7 +26,7 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]  # create a dependency for the db session
 user_dependency = Annotated[dict, Depends(get_current_user)]  # create a dependency for the current user
 
-templates = Jinja2Templates(directory="ToDoApp/templates")
+templates = Jinja2Templates(directory="templates")
 
 class TodoRequest(BaseModel):
     title: str = Field(min_length=3)
