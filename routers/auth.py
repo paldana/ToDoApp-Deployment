@@ -9,16 +9,11 @@ from database import SessionLocal
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
+from settings import settings
 from fastapi.templating import Jinja2Templates
 
 
-## Authentication and User Management - needed for JWT token generation and user creation
-# Generate a secret key for JWT token generation. This should be kept secret and not hardcoded in production. 
-# Use environment variables or a secure vault to store secrets in production.
-# In order to create a secret key, you can use the following command in your terminal:
-# $ openssl rand -hex 32
-SECRET_KEY = "0415d2b592bd25c2722e5567557a517018fb3d1d6ac059318d78195597fd2083"
-ALGORITHM = "HS256"
+## Authentication and User Management - secrets are loaded from `settings`
 
 router = APIRouter(
     prefix="/auth",
@@ -105,14 +100,13 @@ def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
     return Token(access_token=token, token_type="bearer") 
 
 
-def create_access_token(username: str, user_id: int, role: str, expires_delta: timedelta = timedelta(minutes=15)):
+def create_access_token(username: str, user_id: int, role: str, expires_delta: timedelta | None = None):
     to_encode = {"sub": username, "id": user_id, "role": role}
+    if expires_delta is None:
+        expires_delta = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     expire = datetime.now(timezone.utc) + expires_delta
     to_encode.update({"exp": expire})
-
-    # simpler version of the above code
-    # to_encode = {"sub": username, "id": user_id, "exp": datetime.now(timezone.utc) + expires_delta}
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
 # TODO: review what the annotated type is doing here. 
@@ -121,7 +115,7 @@ def create_access_token(username: str, user_id: int, role: str, expires_delta: t
 #  which will handle the extraction of the token from the request headers.
 def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         username: str = payload.get("sub")
         user_id: int = payload.get("id")
         user_role: str = payload.get("role")
